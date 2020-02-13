@@ -587,6 +587,8 @@ class CanvasHandler {
       floor: this.floor,
       x: this.x,
       y: this.y,
+      scaledX: this.getScaledX(),
+      scaledY: this.getScaledY(),
       leftX: this.getLeftX(),
       topY: this.getTopY(),
       rightX: this.getRightX(),
