@@ -10,6 +10,7 @@ import overlay from './overlay';
 import appSettings from './appSettings';
 import nearestMapItem from './nearestMapItem';
 import pluginSettings from './pluginSettings';
+import edges from './edges';
 
 export default combineReducers({
   appSettings,
@@ -23,4 +24,5 @@ export default combineReducers({
   userActivities,
   nearestMapItem,
   pluginSettings,
+  edges,
 });

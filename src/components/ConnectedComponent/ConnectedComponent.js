@@ -19,6 +19,7 @@ const paramStateMap = {
   searchMapItemStore: 'searchMapItem',
   nearestMapItemStore: 'nearestMapItem',
   userActivitiesStore: 'userActivities',
+  edgeStore: 'edges',
 };
 
 const urlParams = ['place', 'from', 'to', 'via', 'x', 'y', 'level', 'floor', 'searchOptions'];
@@ -38,6 +39,7 @@ const canvasParams = [
   'movingScaledY',
   'nextLevel',
   'previousLevel',
+  'getPosition',
 ];
 
 const paramDispatchMap = {

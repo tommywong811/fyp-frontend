@@ -152,7 +152,7 @@ An object storing all legend types available for map items
 #### mapItemStore
 `mapItemStore` - object
 
-An object storing map items with in the currently viewport. Note that these map items may or may not be rendered in map canvas, the default project will not render anything in the map canvas. It is control by another plugin.
+An object storing map items with in the currently viewport.
 
 ```javascript
 {
@@ -342,6 +342,31 @@ An object storing app settings.
 }
 ```
 
+#### edgeStore
+`edgeStore` - object
+
+An object storing edge items (all possible walking paths) with in the currently viewport.
+
+```javascript
+{
+  loading: boolean, /* Indicate if edges are loading or not */
+  failure: boolean, /* Indicate if edges failed to load */
+  success: boolean, /* Indicate if edges are loaded successfully */
+  edges: [ /* An array of edge object */
+    {
+      id: string, /* Id of the edge */
+      fromNodeId: string, /* Starting node id of the edge */
+      toNodeId: string, /* Ending node id of the edge */
+      weightType: 'nodeDistance'|'max'|'number', /* weight type of the edge */
+      weight: number, /* actual weight of weightType is number */
+      floor: string, /* id of the floor in which the edges are on */
+      fromNodeCoordinates: array, /* coordinates [x, y] of the starting node */
+      toNodeCoordinates: array, /* coordinates [x, y] of the ending node */
+    }
+  ]
+}
+```
+
 <!-- [openOverlayHandler](properties/openOverlayHandler.md ':include') -->
 #### openOverlayHandler
 `openOverlayHandler(name, photo, url, others)` - function
@@ -392,6 +417,9 @@ Current map canvas height.
 `normalizedHeight` - number
 
 `height` divided by current level's scale, (i.e. the height value at default zoom level)
+
+#### moving[PropertName]
+The below properties prefixed with `moving` (i.e. `movingX`) means the values keep changing while the user is doing drag and drop action while the counterpart property without prefix `moving` (i.e. `x`) represent a value before a user action just started and will be updated until the user has finished the drag and drop action.
 
 <!-- [movingX](properties/movingX.md ':include') -->
 #### movingX
@@ -446,6 +474,27 @@ Next possible zoom level value that represents a larger scale value. Value Will 
 `previousLevel` - number
 
 Previous zoom level that represents a smaller scale value. Value will be the same as `level` if there is no possible previous zoom level.
+
+#### getPosition
+`getPosition` - function
+
+The getPosition function returns the above positional properties (
+  `floor`,
+  `width`,
+  `height`,
+  `normalizedWidth`,
+  `normalizedHeight`,
+  `movingX`,
+  `movingY`,
+  `movingScaledX`,
+  `movingScaledY`,
+  `movingLeftX`,
+  `movingTopY`,
+  `movingScreenLeftX`,
+  `movingScreenTopY`,
+  `nextLevel`,
+  `previousLevel`,
+), the use case for using this function to get these values instead of connecting them directly is that you just want these values at some point (i.e. right after some API calls) and your plugin doesn't need to change immediately in any way when these values are changed. If your plugin need to update its render based on the current position value, you should connect the properties directly instead of using this function otherwise your plugin will not be reactive to position change.
 
 <!-- [APIEndpoint](properties/APIEndpoint.md ':include') -->
 
