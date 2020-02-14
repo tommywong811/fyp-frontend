@@ -610,11 +610,18 @@ mapItem object:
 
 <!-- [removeMapItem](properties/removeMapItem.md ':include') -->
 #### removeMapItem
+**Deprecated. Use `removeMapItems` instead**
+
 `removeMapItem(mapItemId)` - function
 
 Remove a map item on the map canvas. It takes an map item id as first argument.
 
 If map item id is not found. This function will do nothing.
+
+#### removeMapItems
+`removeMapItem([mapItemId1, mapItemId2, ..., mapItemIdN])` - function
+
+Remove map items on the map canvas. It takes an array of map item ids to be removed.
 
 <!-- [updateDimension](properties/updateDimension.md ':include') -->
 #### updateDimension
