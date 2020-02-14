@@ -1682,6 +1682,7 @@ class CanvasHandler {
     addMapTiles: args => this.addMapTiles(args),
     setMapItems: args => this.setMapItems(args),
     removeMapItem: args => this.removeMapItem(args),
+    removeMapItems: args => this.removeMapItems(args),
     removeAllMapTiles: () => this.removeAllMapTiles(),
     updateDimension: (...args) => this.updateDimension(...args),
     updateLevelToScale: args => this.updateLevelToScale(args),
