@@ -3,23 +3,24 @@ import { connect } from 'react-redux';
 import isNil from 'lodash.isnil';
 
 import ErrorBoundary from '../ErrorBoundary/ErrorBoundary';
+import getEnhancedMapItems from './getEnhancedMapItems';
 import { openOverlayAction } from '../../reducers/overlay';
 import { updateLegendDisplayAction } from '../../reducers/legends';
 import { getNearestMapItemAction } from '../../reducers/nearestMapItem';
 import { setUserActivitiesAction } from '../../reducers/userActivities';
 
 const paramStateMap = {
-  legendStore: 'legends',
-  mapItemStore: 'mapItems',
-  floorStore: 'floors',
-  searchNearestStore: 'searchNearest',
-  searchShortestPathStore: 'searchShortestPath',
-  appSettingStore: 'appSettings',
-  overlayStore: 'overlay',
-  searchMapItemStore: 'searchMapItem',
-  nearestMapItemStore: 'nearestMapItem',
-  userActivitiesStore: 'userActivities',
-  edgeStore: 'edges',
+  legendStore: state => state.legends,
+  mapItemStore: state => getEnhancedMapItems(state),
+  floorStore: state => state.floors,
+  searchNearestStore: state => state.searchNearest,
+  searchShortestPathStore: state => state.searchShortestPath,
+  appSettingStore: state => state.appSettings,
+  overlayStore: state => state.overlay,
+  searchMapItemStore: state => state.searchMapItem,
+  nearestMapItemStore: state => state.nearestMapItem,
+  userActivitiesStore: state => state.userActivities,
+  edgeStore: state => state.edges,
 };
 
 const urlParams = ['place', 'from', 'to', 'via', 'x', 'y', 'level', 'floor', 'searchOptions'];
@@ -119,8 +120,9 @@ const ConnectedComponent = connectParams => PluginComponent => {
         }
 
         if (paramStateMap[param]) {
-          connectedState[param] = state[paramStateMap[param]];
+          connectedState[param] = paramStateMap[param](state);
         }
+
         return connectedState;
       }, {}),
     dispatch =>
