@@ -74,63 +74,77 @@ The plugin entry point file `HelloWorld.js` will have the following format:
 ```javascript
 
 function HelloWorldPrimaryPanel() {
-  return <h1> Hello World in PrimaryPanel </h1>;
+  return <div> Hello World in PrimaryPanel </div>;
 }
 
 function HelloWorldMapCanvas() {
-  return <h1> Hello World in MapCanvas </h1>;
+  return <div> Hello World in MapCanvas </div>;
 }
 
 function HelloWorldOverlayHeader() {
-  return <h1> Hello World in MapCanvas </h1>;
+  return <div> Hello World in OverlayHeader </div>;
 }
 
 function HelloWorldOverlayContent() {
-  return <h1> Hello World in MapCanvas </h1>;
+  return <div> Hello World in OverlayContent </div>;
+}
+
+function HelloWorldMobileOverlayHeader() {
+  return <div> Hello World in MobileOverlayHeader </div>;
+}
+
+function HelloWorldMobileOverlayContent() {
+  return <div> Hello World in MobileOverlayContent </div>;
 }
 
 const PrimaryPanelPlugin = { Component: HelloWorldPrimaryPanel, connect: [] };
 const MapCanvasPlugin = { Component: HelloWorldMapCanvas, connect: [] };
 const OverlayHeaderPlugin = { Component: HelloWorldOverlayHeader, connect: [] };
 const OverlayContentPlugin = { Component: HelloWorldOverlayContent, connect: [] };
+const MobileOverlayHeaderPlugin = { Component: HelloWorldMobileOverlayHeader, connect: [] };
+const MobileOverlayContentPlugin = { Component: HelloWorldMobileOverlayContent, connect: [] };
 
-const id = "helloWorld";
 const name = "Hello World";
 const defaultOff = true;
 const platform = ['DESKTOP'];
 const core = false;
 
+const mapItemEnhancer = (mapItem) => mapItem;
+
 export {
-  id,
   name,
   defaultOff,
   platform,
   core,
+  mapItemEnhancer,
   PrimaryPanelPlugin,
   MapCanvasPlugin,
   OverlayHeaderPlugin,
-  OverlayContentPlugin
+  OverlayContentPlugin,
+  MobileOverlayHeaderPlugin,
+  MobileOverlayContentPlugin
 };
 ```
-
-Basically there are four different types of plugin you can define, you can find the document for each type [here](typesOfPlugins/README.md).
-Note that you also need to define `id`, `name` and `defaultOff` for your plugin and exports them.
-
-`id` - Unique id for your plugin.
 
 `name` - The name of your plugin. It will be used to identify your plugin in plugin toggle panel.
 
 `defaultOff` - Boolean value to define whether your plugin will be off by default, the users can switch it on and off in the plugin toggle panel, default to true if not provided.
 
-`platform` - An array of platforms your plugin supports. Default to all platforms. Available value for platform item is DESKTOP, MOBILE.
+`platform` - An array of platforms your plugin supports. Default to all platforms if not provided. Available value for platform item is DESKTOP, MOBILE.
 
-`core` - Reserved to ITSC pathadvisor team and default to false. Third party plugin must not set this property to true. Core plugin ignore defaultOff and won't be shown in toggle plugin panel as they can't be switched off.
+`core` - Reserved to ITSC PathAdvisor team and default to false. Third party plugin must not set this property to true. Core plugin ignore defaultOff and won't be shown in toggle plugin panel as they can't be switched off.
+
+`mapItemEnhancer` - A function that is called for every element in mapItemStore, and the element in the mapItemStore will be replaced by the return value of this function.
+
+`PrimaryPanelPlugin`, `MapCanvasPlugin`, `OverlayHeaderPlugin`, `OverlayContentPlugin`,`MobileOverlayHeaderPlugin`,
+  `MobileOverlayContentPlugin` - There are six different types of plugin you can define, you can find the document for each type [here](typesOfPlugins/README.md).
+
 
 ![Plugin toggle panel](../images/pluginPanel.png)
 _Plugin toggle panel showing the on/off status of the plugins_
 
 
-Note that if your plugin only contains `PrimaryPanelPlugin`, you don't need to export all the other types. i.e.
+Note that if your plugin only contains one plugin type, for example, if your plugin only add new features to `PrimaryPanelPlugin`, you don't need to export all the other types. i.e.
 
 ```javascript
 function HelloWorld() {
@@ -139,22 +153,20 @@ function HelloWorld() {
 
 const PrimaryPanelPlugin = { Component: HelloWorld, connect: [] };
 
-const id = "helloWorld";
 const name = "Hello World";
-const defaultOff = true;
 
-export { id, name, defaultOff, PrimaryPanelPlugin };
+export { name, PrimaryPanelPlugin }; // <-- only need to export the plugin type you implemented
 ```
 
 ## Component and connected properties
 
-As shown in previous chapter, each plugin type will be in the following structure:
+Each plugin type can be defined in the following structure:
 
 ```javascript
 const PrimaryPanelPlugin = { Component: null, connect: [] };
 ```
 
-There are two keys for a plugin, `Component` and `connect`.
+There are two properties for a plugin you will need to define `Component` and `connect`.
 
 `Component` is the actual plugin component, it can be a plain javascript function or a class extending
 [React.Component](https://reactjs.org/docs/glossary.html#components) or [React.PureComponent](https://reactjs.org/docs/react-api.html#reactpurecomponent)
@@ -183,11 +195,10 @@ const PrimaryPanelPlugin = {
   connect: ["x", "y", "floor"]
 };
 
-const id = "helloWorld";
 const name = "Hello World";
 const defaultOff = true;
 
-export { id, name, defaultOff, PrimaryPanelPlugin };
+export { name, defaultOff, PrimaryPanelPlugin };
 ```
 
 ** Class plugin version **
@@ -209,20 +220,16 @@ const PrimaryPanelPlugin = {
   connect: ["x", "y", "floor"]
 };
 
-
-const id = "helloWorld";
 const name = "Hello World";
-const defaultOff = true;
 
-
-export { id, name, defaultOff, PrimaryPanelPlugin };
+export { name, PrimaryPanelPlugin };
 ```
 
 For each plugin type you can connect different types of properties, they are described in [Types of plugin]() section.
 
 ## Updating and rendering
 
-Each time the properties connecting to the plugin component are updated, the plugin function, or the render method of the plugin if you define your plugin as a class, will be called.
+Each time the connected properties are updated, the plugin function, or the render method of the plugin if you define your plugin as a class, will be called.
 
 Also if your plugin only exists to call some functions and do not render any HTML DOM elements and therefore there is nothing to return then you must return `null`. An error will be thrown if a plugin does not return anything.
 
@@ -246,6 +253,27 @@ class HelloWorld extends React.Component {
 }
 ```
 
-For `MapCanvasPlugin`, the items added to map canvas by calling `setMapItems`, they are not HTML DOM elements as these map items are drawn to map canvas directly. For those plugins you should return null as well unless your are returning some extra HTML DOM elements to be rendered on top of the map canvas.
+It is likely to be the case for `MapCanvasPlugin`, where you call `setMapItems` to add items into map canvas directly instead of returning them from the render function. You should therefore return null in the render function unless you are returning some elements to be rendered on top of the map canvas.
 
 The rule of thumb is your plugin should always have a return statement returning something.
+
+## Map Item enhancer
+
+Your plugin can export a function named `mapItemEnhancer` as shown above. This is called for every element in mapItemStore, and the element in the mapItemStore will be replaced by the return value of this function. If you provide this enhancer, other components or plugins of the system consuming the mapItemStore will then get the enhanced version map items instead of the original data.
+
+The system will apply all enhancers provided by all plugins before supplying them to consumers. Therefore it is important that enhancers should return a map item that conform to the map item schema described in [mapItemStore.mapItems](typesOfPlugins/README.md#mapItemStore). Note that `id`, `floor` and `connectorId` properties are not mutable.
+
+
+Example mapItemEnhancer to add a prefix 'Test' to name property of each map item:
+
+```javascript
+function mapItemEnhancer(item) {
+  return {
+    ...item,
+    name: 'Test ' + (item.name || '')
+  }
+}
+```
+
+![Map item enhancer](../images/enhancer.png)
+_Map item names are prefixed with 'Test'_

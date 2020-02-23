@@ -196,7 +196,6 @@ const MapCanvasPlugin = {
   ],
 };
 
-const id = 'contextMenu';
 const core = true;
 
-export { id, core, MapCanvasPlugin };
+export { core, MapCanvasPlugin };
