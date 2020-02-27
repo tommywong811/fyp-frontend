@@ -356,6 +356,7 @@ class MapCanvas extends Component {
                 }
 
                 const PluginComponent = getConnectedComponent(
+                  id,
                   `mapCanvasMenuBar_${id}`,
                   MenuBarPlugin.connect,
                   MenuBarPlugin.Component,
@@ -406,6 +407,7 @@ class MapCanvas extends Component {
               }
 
               const PluginComponent = getConnectedComponent(
+                id,
                 `mapCanvas_${id}`,
                 MapCanvasPlugin.connect,
                 MapCanvasPlugin.Component,
