@@ -8,6 +8,7 @@ import { openOverlayAction } from '../../reducers/overlay';
 import { updateLegendDisplayAction } from '../../reducers/legends';
 import { getNearestMapItemAction } from '../../reducers/nearestMapItem';
 import { setUserActivitiesAction } from '../../reducers/userActivities';
+import { setPluginMapItemsAction, clearPluginMapItemsAction } from '../../reducers/pluginMapItems';
 
 const paramStateMap = {
   legendStore: state => state.legends,
@@ -56,10 +57,16 @@ const paramDispatchMap = {
   setUserActivitiesHandler: dispatch => payload => {
     dispatch(setUserActivitiesAction(payload));
   },
+  enhanceMapItemsHandler: (dispatch, pluginId) => mapItems => {
+    dispatch(setPluginMapItemsAction(pluginId, mapItems));
+  },
+  clearPluginMapItemsHandler: (dispatch, pluginId) => () => {
+    dispatch(clearPluginMapItemsAction(pluginId));
+  },
 };
 
 /* eslint no-param-reassign: [0] */
-const ConnectedComponent = connectParams => PluginComponent => {
+const ConnectedComponent = (pluginId, connectParams) => PluginComponent => {
   if (!PluginComponent) {
     throw new Error(
       'You must wrap you plugin component in an object { Component: <Your plugin component>, connect: [<param1>, <param2>, ..., <paramN>] }',
@@ -128,7 +135,7 @@ const ConnectedComponent = connectParams => PluginComponent => {
     dispatch =>
       connectParams.reduce((connectedDispatch, param) => {
         if (paramDispatchMap[param]) {
-          connectedDispatch[param] = paramDispatchMap[param](dispatch);
+          connectedDispatch[param] = paramDispatchMap[param](dispatch, pluginId);
         }
         return connectedDispatch;
       }, {}),
