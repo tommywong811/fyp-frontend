@@ -109,14 +109,11 @@ const defaultOff = true;
 const platform = ['DESKTOP'];
 const core = false;
 
-const mapItemEnhancer = (mapItem) => mapItem;
-
 export {
   name,
   defaultOff,
   platform,
   core,
-  mapItemEnhancer,
   PrimaryPanelPlugin,
   MapCanvasPlugin,
   OverlayHeaderPlugin,
@@ -133,8 +130,6 @@ export {
 `platform` - An array of platforms your plugin supports. Default to all platforms if not provided. Available value for platform item is DESKTOP, MOBILE.
 
 `core` - Reserved to ITSC PathAdvisor team and default to false. Third party plugin must not set this property to true. Core plugin ignore defaultOff and won't be shown in toggle plugin panel as they can't be switched off.
-
-`mapItemEnhancer` - A function that is called for every element in mapItemStore, and the element in the mapItemStore will be replaced by the return value of this function.
 
 `PrimaryPanelPlugin`, `MapCanvasPlugin`, `OverlayHeaderPlugin`, `OverlayContentPlugin`,`MobileOverlayHeaderPlugin`,
   `MobileOverlayContentPlugin` - There are six different types of plugin you can define, you can find the document for each type [here](typesOfPlugins/README.md).
@@ -256,24 +251,3 @@ class HelloWorld extends React.Component {
 It is likely to be the case for `MapCanvasPlugin`, where you call `setMapItems` to add items into map canvas directly instead of returning them from the render function. You should therefore return null in the render function unless you are returning some elements to be rendered on top of the map canvas.
 
 The rule of thumb is your plugin should always have a return statement returning something.
-
-## Map Item enhancer
-
-Your plugin can export a function named `mapItemEnhancer` as shown above. This is called for every element in mapItemStore, and the element in the mapItemStore will be replaced by the return value of this function. If you provide this enhancer, other components or plugins of the system consuming the mapItemStore will then get the enhanced version map items instead of the original data.
-
-The system will apply all enhancers provided by all plugins before supplying them to consumers. Therefore it is important that enhancers should return a map item that conform to the map item schema described in [mapItemStore.mapItems](typesOfPlugins/README.md#mapItemStore). Note that `id`, `floor` and `connectorId` properties are not mutable.
-
-
-Example mapItemEnhancer to add a prefix 'Test' to name property of each map item:
-
-```javascript
-function mapItemEnhancer(item) {
-  return {
-    ...item,
-    name: 'Test ' + (item.name || '')
-  }
-}
-```
-
-![Map item enhancer](../images/enhancer.png)
-_Map item names are prefixed with 'Test'_

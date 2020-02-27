@@ -1,5 +1,6 @@
-# Types of plugins
+# Plugin types and properties
 
+## Plugin types
 There are six types of plugin for this project. They are
 
 - `PrimaryPanelPlugin`
@@ -15,9 +16,11 @@ If you want to add any other features in the left panel of the UI, you will need
 
 If you want to add new features in map canvas area (drag and drop floor plan area), you will need to build a `MapCanvasPlugin` type plugin.
 
-If you want to add features for showing more details of a map item on the left UI panel or in the full screen overlay in mobile platform, you will need to build `OverlayHeaderPlugin` and `OverlayContentPlugin` or in mobile platform that would be `MobileOverlayHeaderPlugin` and `MobileOverlayContentPlugin`.
+If you click on a map item on the map and if the map item from [`mapItemStore`](typesOfPlugins/README.md#mapItemStore) has `photo`, `url` or `others` properties defined, then `OverlayHeaderPlugin` and `OverlayContentPlugin` or `MobileOverlayHeaderPlugin` and `MobileOverlayContentPlugin` will be be shown on the left hand side panel. `photo`, `url` or `others` will be made available to these plugins as well.
 
-Note that left UI panel for showing map item details after clicking on them is composed of all `OverlayHeaderPlugin`/`MobileOverlayHeaderPlugin` and `OverlayContentPlugin`/`MobileOverlayContentPlugin` from all plugins. So your `OverlayHeaderPlugin`/ `OverlayContentPlugin` will only add a new section to the panel alongside with other existing content instead of replace all original content.
+If you want to add new section for map items to be shown on the left UI panel or in the full screen overlay in mobile platform, you will need to build `OverlayHeaderPlugin` and `OverlayContentPlugin` or in mobile platform that would be `MobileOverlayHeaderPlugin` and `MobileOverlayContentPlugin`.
+
+Note that the left UI panel for showing map item details after clicking on them is composed of all `OverlayHeaderPlugin`/`MobileOverlayHeaderPlugin` and `OverlayContentPlugin`/`MobileOverlayContentPlugin` from all plugins. So your `OverlayHeaderPlugin`/ `OverlayContentPlugin` will only add a new section to the panel alongside with other existing content instead of replace all original content.
 
 You may need to build more than one of these plugins to complete your features. You can include more than one of the above plugin types into a single plugin package.
 
@@ -349,6 +352,25 @@ type AppSettingStore = {
 }
 ```
 
+#### nearestMapItemStore
+`nearestMapItemStore` - object
+
+An object storing the result after calling [`getNearestMapItemHandler`](typesOfPlugins/README.md#getNearestMapItemHandler)
+
+```typescript
+type NearestMapItemStore = {
+  loading: boolean; /* Indicate if action for requesting a nearest item is still in process or not  */
+  failure: boolean; /* Indicate if action for requesting a nearest item failed or not */
+  success: boolean; /* Indicate if action for requesting a nearest item succeed or not */
+  mapItem: {
+    id: string; /* id of the map item */
+    name: string; /* name of the map item */
+    floor: string; /* floor of the map item */
+    coordinates: [number, number]; /* coordinates of the map item */
+  };
+}
+```
+
 #### edgeStore
 `edgeStore` - object
 
@@ -370,6 +392,59 @@ type EdgeStore = {
     toNodeCoordinates: [number, number] /* coordinates [x, y] of the ending node */
   }[]; /* An array of edge object */
 }
+```
+
+#### enhanceMapItemsHandler
+`enhanceMapItemsHandler(mapItems: MapItemProp[]) - function`
+
+```typescript
+type MapItemProp = {
+  id: string; /* id of the map item */
+  name?: string; /* Name of the map item */
+  coordinates?: [
+    number, /* coordinate x of the map item */
+    number  /* coordinate y of the map item */
+  ];
+  type?: string; /* map item type */
+  photo?: string | null; /* photo url of the map item */
+  url?: string; /* url of the map item */
+  geoLocs?: object; /* a geoJSON object describing the node if it is a room */
+  others?: object /* extra information attached to this node by external sources */
+}
+```
+This function takes an array of map items and then it will update respective map items in `mapItemStore` with provided values. Other components or plugins of the system consuming values in `mapItemStore` will then get the enhanced version of map items instead of the original data.
+
+Provided object values will be merged into the original object values, so you can just provide the properties you wish to update instead of full map item objects. The only required property is `id` which is the map item id to be updated.
+
+It is important that values provided should be an array of map items that conform to the map item schema `MapItemProp` described above which is similar to [mapItemStore.mapItems](typesOfPlugins/README.md#mapItemStore) expect only `id` is the required property.
+
+Example usage:
+
+```javascript
+enhanceMapItemsHandler([{
+  id: 'tYkl7OmZOcvN',
+  name: 'new name for Atrium'
+}]);
+```
+
+![enhanceMapItemHandler](../images/atrium-new-name.png)
+_Change name for Atrium using enhanceMapItemHandler_
+
+
+#### clearPluginMapItemsHandler
+`clearPluginMapItemsHandler` - function
+
+Clear map item data injected by calling `enhanceMapItemsHandler`.
+
+
+#### getNearestMapItemHandler
+`getNearestMapItemHandler(floor: String, coordinates: [number, number])` - function
+
+You can call this function with `floor` and `coordinates` and it will find a map item that is nearest to the given position. The result will be available in [`nearestMapItemStore`](typesOfPlugins/README.md#nearestMapItemStore) once it is ready.
+
+Example usage:
+```javascript
+getNearestMapItemHandler('LG1', [0,0])
 ```
 
 #### openOverlayHandler
@@ -860,7 +935,7 @@ Photo url of the map item.
 #### others
 `others` - object
 
-A object with any custom properties of the map item other than the the default `name`, `url` and `photo` It can be defined when other plugin calls `openOverlayHandler`
+A object with any custom properties of the map item other than the the default `name`, `url` and `photo`.
 
 
 ## MobileOverlayContentPlugin
