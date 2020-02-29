@@ -163,12 +163,12 @@ class ContextMenu extends Component {
             </li>
             <li>
               <button type="button" className={style.button} onClick={this.setLocation('via')}>
-                Add a destination
+                Add a passing location
               </button>
             </li>
             <li>
               <button type="button" className={style.button} onClick={this.setLocation('to')}>
-                Stops to here
+                Ends here
               </button>
             </li>
           </>
