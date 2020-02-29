@@ -101,7 +101,7 @@ Now that you have added the files mentioned in the previous section, open a term
 
 Now you should be able to visit your local pathadvisor: http://localhost:3000.
 
-Click on the settings icon <img src="../imgs/settings.png" alt="Settings" width="20" /> at the bottom right corner, you will see a panel appear and you will see your plugin's name is already there.
+Click on the settings icon <img src="../imgs/settings.png" alt="Settings" style="width: 20px" /> at the bottom right corner, you will see a panel appear and you will see your plugin's name is already there.
 
 <img src="../imgs/plugin-panel.png" style="width: 50%" alt="Plugin Panel" />
 
