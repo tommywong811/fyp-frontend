@@ -1,10 +1,10 @@
 # Get it up and running
 
-To develop a plugin for Pathadvisor system. You need fork and clone the project, get it up and running, implement the plugin, test it locally and then create a pull request. Once the pull request is approved, your plugin will be merged back to official repository and will become part of the Pathadvisor system.
+To develop a plugin for Pathadvisor system. You need to fork and clone the project, get it up and running, implement the plugin, test it locally and then create a pull request. Once the pull request is approved, your plugin will be merged back to official repository and will become part of the PathAdvisor system.
 
 ## Fork the repository
 
-To fork (create a copy) the Pathadvisor project, go to [official Pathadvisor repository](https://gitlab.com/thenrikie/pathadvisor-frontend) and click Fork button. You need to login to see the fork button.
+To fork (create a copy) the PathAdvisor project, go to [official PathAdvisor repository](https://gitlab.com/thenrikie/pathadvisor-frontend) and click Fork button. You need to login to see the fork button.
 
 
 <sup>Figure 1:  Fork button</sup><br/>

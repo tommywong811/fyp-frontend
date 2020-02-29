@@ -286,10 +286,6 @@ In RoomInfo.js, update MapCanvas:
           airQuality: roomsByName[item.name].airQuality,
         },
       });
-
-      if (!item.geoLocs || !item.geoLocs.coordinates) {
-        return;
-      }
     });
 
     if (enhancedMapItems.length) {

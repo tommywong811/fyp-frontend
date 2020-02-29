@@ -1,12 +1,12 @@
 # Mock API
 
-Since we don't have genuine REST APIs for now, we have developed mock APIs that give us the traffic and air quality information.
+Since we don't have genuine REST APIs for now, we have developed mock APIs that give us the traffic and air quality data.
 
-You can find the source code of the mock API [here](https://gitlab.com/thenrikie/pathadvisor-frontend/-/tree/develop/docs/pluginTutorial/mockAPIs).
+You can find the source code of the mock APIs [here](https://gitlab.com/thenrikie/pathadvisor-frontend/-/tree/develop/docs/pluginTutorial/mockAPIs).
 
 ## Usage
 
-We have two REST APIs available
+We have three REST APIs available:
 
 - `/traffic`: returns traffic data in a specified area
 - `/air-quality`: returns air-quality data in a specified area
@@ -19,7 +19,7 @@ The `/traffic` and `/air-quality` API takes five parameters from query string:
 
 ## Response
 
-The `/traffic` and `/air-quality` API returns data points for all tiles with 100x100 dimension that intersect with the rectangle area (x, y, toX, toY) in the following json format.
+The `/traffic` and `/air-quality` API returns data points for all tiles with 100x100 dimension that stay within or intersect with the rectangle area (x, y, toX, toY) in the following json format.
 
 ```json
 [
