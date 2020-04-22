@@ -1,0 +1,32 @@
+.resultBox{
+  display: flex;
+  justify-content: space-between;
+}
+
+.resultText{
+  display: flex;
+  justify-content: center;
+}
+
+.resultButton{
+}
+
+.firstResult{
+  display: flex;
+  justify-content: center;
+}
+.firstResultElement{
+  flex-grow: 1;
+  text-align: center;
+}
+.pluginHeader{
+  font-weight: bold;
+  font-size: 13px;
+  border-bottom: 1px solid #cccccc;
+  padding: 5px 0;
+  margin-bottom: 5px;
+}
+
+
+
+

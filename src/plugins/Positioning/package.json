@@ -1,0 +1,9 @@
+{
+  "name": "@ust-pathadvisor/positioning",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "bootstrap": "^4.4.1",
+    "react-bootstrap": "^1.0.0"
+  }
+}
