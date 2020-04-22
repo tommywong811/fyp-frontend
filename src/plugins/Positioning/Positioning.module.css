@@ -9,15 +9,25 @@
 }
 
 .resultButton{
+  padding: 5px;
+}
+
+.buttonbox{
+  display: flex;
+  flex-direction: row;
 }
 
 .firstResult{
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
 }
 .firstResultElement{
-  flex-grow: 1;
-  text-align: center;
+  display: flex;
+  flex-direction: row;
+}
+
+.firstResultButton{
+  padding: 5px;
 }
 .pluginHeader{
   font-weight: bold;
@@ -26,6 +36,7 @@
   padding: 5px 0;
   margin-bottom: 5px;
 }
+
 
 
 

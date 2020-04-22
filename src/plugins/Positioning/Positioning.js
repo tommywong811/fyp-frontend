@@ -2,7 +2,8 @@ import React, {useState} from "react";
 import Modal from "react-bootstrap/Modal"
 import Table from 'react-bootstrap/Table'
 import style from './Positioning.module.css';
-import Button from "react-bootstrap/Button"
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 import 'bootstrap/dist/css/bootstrap.min.css';
 function Positioning({linkTo,from,to}) {
 
@@ -23,20 +24,21 @@ function Positioning({linkTo,from,to}) {
       .then(response => response.json())
       .then(response => {
         console.log('upload success', response);
+        setshowMore(false);
         setfirstResult(<div className={style.firstResult}>
           <div className={style.firstResultElement}>{response.data[0].position}</div>
-          <div className={style.firstResultElement}><Button onClick={() => {
-            handleSearch(response.data[0].position)
-          }}>From</Button><Button onClick={() => {
+          <div className={style.firstResultElement}><div className={style.firstResultButton}> <Button onClick={() => {
+            handleSearch(response.data[0].position, 'from')
+          }}>From</Button></div><div className={style.firstResultButton}> <Button onClick={() => {
             handleSearch(response.data[0].position,'to')
-          }}>To</Button></div>
+          }}>To</Button></div></div>
         </div>)
         setresultList(response.data.map((data) =>
-          <tr><td className={style.resultBox}><div className={style.resultText}>{data.position}</div><div className={style.resultButton}><Button onClick={() => {
+          <tr><td className={style.resultBox}><div className={style.resultText}>{data.position}</div><div className={style.buttonbox}><div className={style.resultButton}><Button onClick={() => {
           handleSearch(data.position,'from')
-          }}>From</Button><Button onClick={() => {
+          }}>From</Button></div><div className={style.resultButton}><Button onClick={() => {
             handleSearch(data.position,'to')
-          }}>To</Button><br/></div></td></tr>));
+          }}>To</Button></div><br/></div></td></tr>));
         setmodalShow(true);
       })
       .catch(error => {
@@ -131,6 +133,11 @@ function Positioning({linkTo,from,to}) {
         </Table>}
       </Modal.Body>
       <Modal.Footer>
+        {showMore && <Form>
+          <Form.Group controlId="formBasicCheckbox">
+            <Form.Check type="checkbox" label="Join User-experience Enhancement Program" />
+          </Form.Group>
+        </Form>}
         {!showMore && <Button onClick={() => {
           setshowMore(true)
         }}>Show More Result</Button>}
