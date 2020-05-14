@@ -4,6 +4,8 @@ import Table from 'react-bootstrap/Table'
 import style from './Positioning.module.css';
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import InputGroup from "react-bootstrap/InputGroup";
+import FormControl from "react-bootstrap/FormControl";
 import 'bootstrap/dist/css/bootstrap.min.css';
 function Positioning({linkTo,from,to}) {
 
@@ -17,7 +19,7 @@ function Positioning({linkTo,from,to}) {
     const data = new FormData();
     data.append('photo', event.target.files[0]);
 
-    fetch('http://192.168.0.115:3002/api/upload', {
+    fetch('http://113.255.193.44:3002/api/upload', {
       method: 'POST',
       body: data,
     })
@@ -34,7 +36,7 @@ function Positioning({linkTo,from,to}) {
           }}>To</Button></div></div>
         </div>)
         setresultList(response.data.map((data) =>
-          <tr><td className={style.resultBox}><div className={style.resultText}>{data.position}</div><div className={style.buttonbox}><div className={style.resultButton}><Button onClick={() => {
+          <tr><td><div className={style.resultText}>{data.position}</div></td><td><div className={style.resultText}>{data.confidence}</div></td><td><div className={style.buttonbox}><div className={style.resultButton}><Button onClick={() => {
           handleSearch(data.position,'from')
           }}>From</Button></div><div className={style.resultButton}><Button onClick={() => {
             handleSearch(data.position,'to')
@@ -127,8 +129,17 @@ function Positioning({linkTo,from,to}) {
       <Modal.Body >
         {!showMore && firstResult}
         {showMore && <Table striped bordered>
+          <thead>
+          <tr>
+            <th>Location</th>
+            <th>Confidence</th>
+            <th>Action</th>
+          </tr>
+          </thead>
           <tbody>
           {resultList}
+          <tr><td colSpan={3}> <InputGroup size={'lg'}>
+            <FormControl aria-label="Large" aria-describedby="inputGroup-sizing-sm" placeholder={"Or please tell us the correct location"}/></InputGroup></td></tr>
           </tbody>
         </Table>}
       </Modal.Body>
