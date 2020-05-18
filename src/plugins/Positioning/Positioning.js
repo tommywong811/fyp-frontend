@@ -6,6 +6,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import FormControl from "react-bootstrap/FormControl";
+import Spinner from "react-bootstrap/Spinner";
 import 'bootstrap/dist/css/bootstrap.min.css';
 function Positioning({linkTo,from,to}) {
 
@@ -14,11 +15,13 @@ function Positioning({linkTo,from,to}) {
   const [resultList, setresultList] = useState(null);
   const [firstResult, setfirstResult] = useState(null);
   const [showMore, setshowMore] = useState(false);
+  const [isLoading, setisLoading] = useState(false);
   function handleUploadPhoto(event){
     setphoto(event.target.files[0]);
     const data = new FormData();
     data.append('photo', event.target.files[0]);
-
+    setmodalShow(true);
+    setisLoading(true);
     fetch('http://113.255.193.44:3002/api/upload', {
       method: 'POST',
       body: data,
@@ -27,6 +30,7 @@ function Positioning({linkTo,from,to}) {
       .then(response => {
         console.log('upload success', response);
         setshowMore(false);
+        setisLoading(false);
         setfirstResult(<div className={style.firstResult}>
           <div className={style.firstResultElement}>{response.data[0].position}</div>
           <div className={style.firstResultElement}><div className={style.firstResultButton}> <Button onClick={() => {
@@ -41,7 +45,7 @@ function Positioning({linkTo,from,to}) {
           }}>From</Button></div><div className={style.resultButton}><Button onClick={() => {
             handleSearch(data.position,'to')
           }}>To</Button></div><br/></div></td></tr>));
-        setmodalShow(true);
+
       })
       .catch(error => {
         console.log('upload error', error);
@@ -127,6 +131,7 @@ function Positioning({linkTo,from,to}) {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body >
+        {isLoading && <Spinner animation="border" variant="primary"/>}
         {!showMore && firstResult}
         {showMore && <Table striped bordered>
           <thead>
